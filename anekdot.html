@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head><title>😂 Анекдоты RU</title>
+<head><title>😂 Анекдоты rzhunemogu.ru</title>
 <style>body{font-family:Arial;max-width:600px;margin:50px auto;padding:20px;}
 button{background:#ff4500;color:white;padding:15px 30px;border:none;border-radius:25px;cursor:pointer;font-size:18px;}
 button:hover{background:#cc3700;} #result{margin-top:20px;padding:20px;background:#fff3cd;border-radius:10px;} .anekdot{font-size:22px;line-height:1.4;}</style>
 </head>
 <body>
-<h1>😂 Русские анекдоты API</h1>
-<button onclick="getAnekdot()">Новый анекдот</button>
+<h1>😂 Русские анекдоты</h1>
+<button onclick="getAnekdot()">Новый анекдот 🇷🇺</button>
 <div id="result">Жми кнопку!</div>
 <a href="index.html">🏠 Главная</a>
 <script>
 async function getAnekdot(){
     document.getElementById('result').innerHTML='⏳ Ловлю анекдот...';
     try{
-        const res=await fetch('https://api.anekdot.ru/random/?limit=1');
-        const data=await res.json();
+        const res=await fetch('http://rzhunemogu.ru/RandJSON.aspx?CType=1');
+        const text=await res.text();
+        // Парсим JSONP
+        const json=text.match(/\[.*\]/)[0];
+        const data=JSON.parse(json);
         document.getElementById('result').innerHTML=`
-            <div class="anekdot">${data[0].text}</div>
-            <p><small>ID: ${data[0].id}</small></p>
+            <div class="anekdot">${data[0]}</div>
         `;
     }catch(e){
-        document.getElementById('result').innerHTML='😿 Анекдот убежал';
+        document.getElementById('result').innerHTML='😿 Анекдоты закончились';
     }
 }
 </script>

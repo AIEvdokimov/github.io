@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><title>🇷🇺 Пословицы</title>
+<style>body{font-family:Arial;max-width:600px;margin:50px auto;padding:20px;}
+button{background:#8b4513;color:white;padding:15px 30px;border:none;border-radius:25px;cursor:pointer;}
+#result{margin-top:20px;padding:20px;background:#f5f5dc;border-radius:10px;border-left:5px solid #8b4513;} .proverb{font-size:24px;font-weight:bold;}</style>
+</head>
+<body>
+<h1>🇷🇺 Русские пословицы</h1>
+<button onclick="getProverb()">Случайная пословица</button>
+<div id="result">Жми!</div>
+<script>
+const proverbs=[
+    "Не все то золото, что блестит",
+    "Волков бояться - в лес не ходить", 
+    "Кто рано встает - тому Бог подает",
+    "Делу время - потехе час",
+    "Семь раз отмерь - один отрежь",
+    "Под лежачий камень вода не течет"
+];
+function getProverb(){
+    const random=proverbs[Math.floor(Math.random()*proverbs.length)];
+    document.getElementById('result').innerHTML=`
+        <div class="proverb">«${random}»</div>
+    `;
+}
+</script>
+</body>
+</html>
