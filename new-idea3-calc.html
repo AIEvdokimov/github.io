@@ -5,79 +5,30 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="container mt-5">
-    <h1>КВАДРАТНЫЙ график функций</h1>
-    
-    <input id="range" class="form-control w-25 d-inline" type="number" step="5" min="10" max="200" value="50">
-    <button onclick="drawGraphs()" class="btn btn-success ms-2">Построить</button>
-    
-    <!-- ✅ КВАДРАТНЫЙ canvas! -->
-    <canvas id="chart" width="700" height="700" class="mt-4 border"></canvas>
+    <h1>Графики x² x³ √x sin(x)</h1>
+    <canvas id="chart" width="600" height="600"></canvas>
 
     <script>
-    let chart;
-    
-    function drawGraphs() {
-        const range = parseFloat(document.getElementById('range').value);
-        
-        // ✅ ОДИНАКОВЫЙ диапазон X/Y!
-        const X_MIN = -range;
-        const X_MAX = +range;
-        const Y_MIN = -range;
-        const Y_MAX = +range;
-        
-        const step = 0.5;
-        const xValues = [];
-        const x2Values = [];
-        const x3Values = [];
-        const sqrtValues = [];
-        const sinValues = [];
-        
-        for (let x = X_MIN; x <= X_MAX; x += step) {
-            xValues.push(x.toFixed(0));
-            
-            x2Values.push(x * x);                    // x² = 10000 при x=100!
-            x3Values.push(x * x * x);                // x³ = 1e6 при x=100!
-            sqrtValues.push(x >= 0 ? Math.sqrt(x) : null);
-            sinValues.push(Math.sin(x));
-        }
-        
-        const ctx = document.getElementById('chart').getContext('2d');
-        if (chart) chart.destroy();
-        
-        chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: xValues,
-                datasets: [
-                    { label: 'x²', data: x2Values, borderColor: 'red', fill: false, tension: 0.1 },
-                    { label: 'x³', data: x3Values, borderColor: 'blue', fill: false, tension: 0.1 },
-                    { label: '√x', data: sqrtValues, borderColor: 'green', fill: false, tension: 0.1, borderDash: [5, 5] },
-                    { label: 'sin(x)', data: sinValues, borderColor: 'purple', fill: false, tension: 0.4 }
-                ]
-            },
-            options: {
-                responsive: false,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        min: X_MIN,    // -50 ... +50
-                        max: X_MAX,
-                        grid: { color: (ctx) => ctx.tick.value === 0 ? 'black' : 'rgba(0,0,0,0.1)' },
-                        ticks: { stepSize: 10 }
-                    },
-                    y: {
-                        min: Y_MIN,    // -50 ... +50 ← ТОЧНО ТАК ЖЕ!
-                        max: Y_MAX,
-                        grid: { color: (ctx) => ctx.tick.value === 0 ? 'black' : 'rgba(0,0,0,0.1)' },
-                        ticks: { stepSize: 10 }
-                    }
-                },
-                aspectRatio: 1  // ✅ КВАДРАТНЫЙ!
+    const ctx = document.getElementById('chart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Array.from({length: 101}, (_, i) => (i-50).toFixed(0)),
+            datasets: [
+                { label: 'x²', data: Array.from({length: 101}, (_, i) => Math.pow(i-50, 2)), borderColor: 'red', tension: 0.1 },
+                { label: 'x³', data: Array.from({length: 101}, (_, i) => Math.pow(i-50, 3)), borderColor: 'blue', tension: 0.1 },
+                { label: '√x', data: Array.from({length: 101}, (_, i) => i>=50 ? Math.sqrt(i-50) : null), borderColor: 'green', borderDash: [5,5] },
+                { label: 'sin(x)', data: Array.from({length: 101}, (_, i) => Math.sin(i-50)), borderColor: 'purple', tension: 0.4 }
+            ]
+        },
+        options: {
+            responsive: false,
+            scales: {
+                x: { min: -50, max: 50, grid: {color: ctx => ctx.tick.value === 0 ? 'black' : '#eee'}},
+                y: { min: -50, max: 50, grid: {color: ctx => ctx.tick.value === 0 ? 'black' : '#eee'}}
             }
-        });
-    }
-    
-    drawGraphs();
+        }
+    });
     </script>
 </body>
 </html>
