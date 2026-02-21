@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Библиотеки (загружаются автоматически) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h1>Графики функций</h1>
+    <p>Введи X (от 0.1 до 10):</p>
+    
+    <input id="x" class="form-control w-25 d-inline" type="number" step="0.1" min="0.1" max="10" value="2">
+    <button onclick="drawGraphs()" class="btn btn-success ms-2">Построить</button>
+    
+    <canvas id="chart" height="400" class="mt-4 border"></canvas>
+
+    <script>
+    let chart;
+    
+    function drawGraphs() {
+        const xInput = parseFloat(document.getElementById('x').value);
+        if (xInput <= 0 || xInput > 10) {
+            alert('X от 0.1 до 10!');
+            return;
+        }
+        
+        // Создаем точки от 0 до X
+        const step = 0.1;
+        const xValues = [];
+        const x2Values = [];
+        const x3Values = [];
+        const sqrtValues = [];
+        const logValues = [];
+        const sinValues = [];
+        
+        for (let x = 0; x <= xInput; x += step) {
+            xValues.push(x);
+            x2Values.push(x * x);           // x²
+            x3Values.push(x * x * x);       // x³
+            sqrtValues.push(Math.sqrt(x));  // √x
+            logValues.push(Math.log10(x+0.1)); // log₁₀(x)
+            sinValues.push(Math.sin(x));    // sin(x)
+        }
+        
+        const ctx = document.getElementById('chart').getContext('2d');
+        if (chart) chart.destroy();
+        
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: xValues.map(v => v.toFixed(1)),
+                datasets: [
+                    { label: 'x²', data: x2Values, borderColor: 'red', fill: false },
+                    { label: 'x³', data: x3Values, borderColor: 'blue', fill: false },
+                    { label: '√x', data: sqrtValues, borderColor: 'green', fill: false },
+                    { label: 'log₁₀(x)', data: logValues, borderColor: 'orange', fill: false },
+                    { label: 'sin(x)', data: sinValues, borderColor: 'purple', fill: false }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+    
+    // Автостарт
+    drawGraphs();
+    </script>
+</body>
+</html>
